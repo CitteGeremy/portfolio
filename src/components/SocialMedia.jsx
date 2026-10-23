@@ -1,39 +1,21 @@
-import React from 'react'
+import React from 'react';
 import { BsDiscord, BsLinkedin, BsTwitch, BsYoutube } from 'react-icons/bs';
 
-const SocialMedia = () => {
-  return (
-    <div className='app__social'>
-        <div>
+const socialLinks = [
+  { label: 'Discord', href: 'https://discord.com/users/213819400191606785', Icon: BsDiscord },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/g%C3%A9r%C3%A9my-citt%C3%A9/', Icon: BsLinkedin },
+  { label: 'Twitch', href: 'https://www.twitch.tv/kaiizer971', Icon: BsTwitch },
+  { label: 'YouTube', href: 'https://www.youtube.com/channel/UCJc0vbzF6xAi83sHeYqfZsw', Icon: BsYoutube },
+];
 
-        <a className='link-discord' href='https://discord.gg/Nf4gj97' target="_blank" rel="noreferrer">
-            <BsDiscord  />
-        </a>
+const SocialMedia = () => (
+  <aside className="app__social" aria-label="Réseaux sociaux">
+    {socialLinks.map(({ label, href, Icon }) => (
+      <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}>
+        <Icon aria-hidden="true" />
+      </a>
+    ))}
+  </aside>
+);
 
-        </div>
-        <div>
-
-        <a className='link-linkedin' href='https://www.linkedin.com/in/g%C3%A9r%C3%A9my-citt%C3%A9/' target="_blank" rel="noreferrer">
-            <BsLinkedin />
-        </a>
-
-        </div>
-        <div>
-
-        <a className='link-twitch' href='https://www.twitch.tv/kaiizer971' target="_blank" rel="noreferrer">
-            <BsTwitch />
-        </a>
-
-        </div>
-        <div>
-
-        <a className='link-yt' href='https://www.youtube.com/channel/UCJc0vbzF6xAi83sHeYqfZsw' target="_blank" rel="noreferrer">
-            <BsYoutube />
-        </a>
-
-        </div>
-    </div>
-  )
-}
-
-export default SocialMedia
+export default SocialMedia;

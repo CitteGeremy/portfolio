@@ -1,37 +1,84 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
 :root {
-  --font-base: "DM Sans", sans-serif;
-
+  --font-base: 'DM Sans', sans-serif;
   --primary-color: #ffffff;
-  --blacktext-color: #0b0b0b;
+  --blacktext-color: #20262d;
   --whitetext-color: #ffffff;
-/*  --secondary-color: #313bac; */
-  --secondary-color: #BA181B;
+  --secondary-color: #ba181b;
+  --accent-ink: #a4161a;
   --black-color: #0f0f0f;
   --lightGray-color: #e4e4e4;
-  --gray-color: #3d535f;
-  --navtext-color: #b7b7b7;
-  --graybg-color: #f5f3f4;
+  --gray-color: #606a73;
+  --navtext-color: #6c757d;
+  --graybg-color: #f6f7f8;
   --lightgraybg-color: #ffffff;
-  --lightblack-color: #2e2e2e;
-  --llblack-color: #495057;
-  --lllblack-color: #6C757D;
-  --brown-color: #46364a;
   --white-color: #fef8f8;
-  --red-color: #A4161A;
+  --red-color: #a4161a;
   --darkred-color: #660708;
   --darkmodebg-color: #181818;
-  --navlight-color: #ffffff40;
-  --nav-color: #ffffff;
+  --nav-color: rgba(255, 255, 255, 0.25);
   --navdark-color: #232323;
   --topline-color: #3d535f;
+  --card-shadow: 0 14px 34px rgba(25, 35, 43, 0.07);
+  --card-surface: #ffffff;
+  --surface-border: #e6e9ec;
+  --nav-surface: rgba(255, 255, 255, 0.96);
+  --nav-border: #e6e9ec;
+  --nav-shadow: 0 10px 28px rgba(25, 35, 43, 0.06);
+}
 
+:root[data-theme='dark'] {
+  --accent-ink: #ff7375;
+  --primary-color: #171a1d;
+  --blacktext-color: #fef8f8;
+  --whitetext-color: #fef8f8;
+  --graybg-color: #1c2024;
+  --lightgraybg-color: #242a2e;
+  --gray-color: #aab3ba;
+  --navtext-color: #d0d0d0;
+  --topline-color: #ffffff;
+  --lightGray-color: #42494f;
+  --darkred-color: #8f171c;
+  --card-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+  --card-surface: #20252a;
+  --surface-border: #353d43;
+  --nav-surface: rgba(23, 26, 29, 0.96);
+  --nav-border: #353d43;
+  --nav-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  background: var(--graybg-color);
+  color: var(--blacktext-color);
+  font-family: var(--font-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--secondary-color);
+  color: #fff;
 }

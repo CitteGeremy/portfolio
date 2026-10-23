@@ -1,22 +1,13 @@
-import React from 'react'
-import { NavigationDots, SocialMedia } from '../components';
+import React from 'react';
 
-const AppWrap = (Component, idName, classNames) => function HOC () {
+const AppWrap = (Component, idName, classNames = '') => function AppSection() {
   return (
-    <div id={idName} className={`app__container ${classNames}`}>
-        <SocialMedia />
+    <section id={idName} className={['app__container', classNames].filter(Boolean).join(' ')}>
+      <div className="app__wrapper app__flex">
+        <Component />
+      </div>
+    </section>
+  );
+};
 
-        <div className='app__wrapper app__flex'>
-            <Component />
-
-            <div className='copyright'>
-                <p className='p-text'>@2023 GÉRÉMY</p>
-                <p className='p-text'>All rights reserved</p>
-            </div>
-        </div>
-        <NavigationDots active={idName} />
-    </div>
-  )
-}
-
-export default AppWrap
+export default AppWrap;

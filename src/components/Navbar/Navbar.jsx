@@ -1,69 +1,152 @@
-import React, { useState } from 'react';
-import { HiMenuAlt4, HiX } from 'react-icons/hi';
-import { motion } from "framer-motion"
+import { useEffect, useRef, useState } from 'react';
+import { HiArrowRight, HiMenuAlt3, HiOutlineMoon, HiOutlineSun, HiX } from 'react-icons/hi';
+import { motion } from 'framer-motion';
 
 import { images } from '../../constants';
 import './Navbar.scss';
 
-var root = document.querySelector(':root');
-var rootStyles = getComputedStyle(root);
-var primary = rootStyles.getPropertyValue('--navdark-color');
+const navigation = [
+  { id: 'home', label: 'Accueil' },
+  { id: 'services', label: 'Services' },
+  { id: 'portfolio', label: 'Portfolio' },
+  { id: 'competences', label: 'Compétences' },
+  { id: 'contact', label: 'Contact' },
+];
 
+const Navbar = ({ theme, onToggleTheme }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+  const headerRef = useRef(null);
+  const menuButtonRef = useRef(null);
 
-const Navbar = () => {
-  const [toggle, setToggle] = useState(false);
-  
+  useEffect(() => {
+    const updatePosition = () => {
+      const marker = window.scrollY + window.innerHeight * 0.42;
+      const visibleSection = navigation.reduce((current, { id }) => {
+        const section = document.getElementById(id);
+        return section && section.offsetTop <= marker ? id : current;
+      }, 'home');
 
-  window.onscroll = function (event) {
-    var scroll = window.pageYOffset;
-    if (scroll < 300) {
-      document.getElementById("navb").style.backgroundColor = "rgba(255, 255, 255, 0.25)";
-      document.getElementById("navb").style.transition = "all 1s";
-      document.getElementById("logo").style.filter = "invert(0%)";      
+      setActiveSection(visibleSection);
+      setIsScrolled(window.scrollY > 24);
+    };
+
+    updatePosition();
+    window.addEventListener('scroll', updatePosition, { passive: true });
+    window.addEventListener('resize', updatePosition);
+    return () => {
+      window.removeEventListener('scroll', updatePosition);
+      window.removeEventListener('resize', updatePosition);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMenuOpen) return undefined;
+
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
       }
-      else {
-        document.getElementById("navb").style.transition = "all 1s";
-        document.getElementById("navb").style.backgroundColor = primary;
-        document.getElementById("logo").style.filter = "invert(100%)";
-    } 
- }
+    };
+    const closeOutside = (event) => {
+      if (!headerRef.current?.contains(event.target)) setIsMenuOpen(false);
+    };
+
+    document.addEventListener('keydown', closeOnEscape);
+    document.addEventListener('pointerdown', closeOutside);
+    return () => {
+      document.removeEventListener('keydown', closeOnEscape);
+      document.removeEventListener('pointerdown', closeOutside);
+    };
+  }, [isMenuOpen]);
 
   return (
-    <nav className="app__navbar" id="navb">
-      <div className="app__navbar-logo">
-        <img id='logo' src={images.logo} alt="logo" />
-      </div>
-      <ul className="app__navbar-links">
-        {['home', 'services', 'portfolio', 'compétences', 'contact'].map((item) => (
-          <li className="app__flex p-text" key={`link-${item}`}>
-            <div />
-            <a href={`#${item}`}>{item}</a>
-          </li>
-        ))}
-      </ul>
+    <header
+      ref={headerRef}
+      className={['app__navbar', isScrolled && 'app__navbar--scrolled'].filter(Boolean).join(' ')}
+    >
+      <a className="app__navbar-logo" href="#home" aria-label="Retour à l'accueil">
+        <img src={images.logo} alt="" />
+        <span className="app__navbar-brand">
+          <strong>Gérémy Citté</strong>
+          <small>Développeur web & mobile</small>
+        </span>
+      </a>
 
-      <div className="app__navbar-menu">
-        <HiMenuAlt4 onClick={() => setToggle(true)} />
+      <nav className="app__navbar-links" aria-label="Navigation principale">
+        <ul>
+          {navigation.slice(0, -1).map(({ id, label }) => (
+            <li key={id}>
+              <a href={'#' + id} aria-current={activeSection === id ? 'location' : undefined}>
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
-        {toggle && (
-          <motion.div
-            whileInView={{ x: [150, 0] }}
-            transition={{ duration: 0.8, stiffness: 100, type: 'spring' }}
-          >
-            <HiX onClick={() => setToggle(false)} />
-            <ul>
-              {['home', 'services', 'portfolio', 'compétences', 'contact'].map((item) => (
-                <li key={item}>
-                  <a href={`#${item}`} onClick={() => setToggle(false)}>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
+      <div className="app__navbar-actions">
+        <a
+          className="app__navbar-contact"
+          href="#contact"
+          aria-current={activeSection === 'contact' ? 'location' : undefined}
+        >
+          Parlons projet <HiArrowRight aria-hidden="true" />
+        </a>
+
+        <button
+          className="theme-toggle"
+          type="button"
+          onClick={onToggleTheme}
+          aria-label={theme === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'}
+          aria-pressed={theme === 'dark'}
+          title={theme === 'dark' ? 'Activer le mode clair' : 'Activer le mode sombre'}
+        >
+          {theme === 'dark' ? <HiOutlineSun aria-hidden="true" /> : <HiOutlineMoon aria-hidden="true" />}
+        </button>
+
+        <button
+          ref={menuButtonRef}
+          className="app__navbar-menu-button"
+          type="button"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          aria-label={isMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-menu"
+        >
+          {isMenuOpen ? <HiX aria-hidden="true" /> : <HiMenuAlt3 aria-hidden="true" />}
+        </button>
       </div>
-    </nav>
+
+      {isMenuOpen && (
+        <motion.nav
+          id="mobile-menu"
+          className="app__navbar-menu"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          aria-label="Navigation mobile"
+        >
+          <ul>
+            {navigation.map(({ id, label }, index) => (
+              <li key={id}>
+                <a
+                  href={'#' + id}
+                  aria-current={activeSection === id ? 'location' : undefined}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  {label}
+                  <HiArrowRight aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </motion.nav>
+      )}
+    </header>
   );
 };
 

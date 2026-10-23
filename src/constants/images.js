@@ -40,7 +40,7 @@ import ue5 from '../assets/ue5.png';
 import js from '../assets/js.png';
 import gmail from '../assets/gmail.png';
 
-export default {
+const images = {
   email,
   mobile,
   api,
@@ -80,3 +80,5 @@ export default {
   js,
   gmail,
 };
+
+export default images;

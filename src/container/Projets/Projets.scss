@@ -1,162 +1,178 @@
-.app__works{
-    flex: 1;
-    width: 100%;
-    flex-direction: column;
+.app__works {
+  width: 100%;
+  flex-direction: column;
 }
 
-.app__work-filter{
-    display: flex;
-    flex-direction: row;
+.app__work-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 2.5rem 0;
+}
+
+.app__work-filter-item {
+  min-height: 40px;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 6px;
+  background: var(--card-surface);
+  color: var(--gray-color);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.app__work-filter-item:hover,
+.app__work-filter-item:focus-visible {
+  border-color: var(--gray-color);
+  color: var(--blacktext-color);
+}
+
+.app__work-filter-item.item-active {
+  border-color: var(--blacktext-color);
+  background: var(--blacktext-color);
+  color: var(--primary-color);
+}
+
+.portfolio-status {
+  margin: 2rem 0;
+  color: var(--gray-color);
+  text-align: center;
+}
+
+.app__work-portfolio {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.app__work-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 0.75rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: var(--card-surface);
+  color: var(--blacktext-color);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app__work-item:hover {
+  border-color: var(--nav-border);
+  box-shadow: var(--card-shadow);
+}
+
+.app__work-img {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  overflow: hidden;
+  border-radius: 7px;
+  background: var(--graybg-color);
+}
+
+.app__work-img > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-placeholder {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: 1rem;
+  color: var(--gray-color);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.app__work-hover {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 25, 30, 0.55);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.app__work-hover:focus-within,
+.app__work-img:hover .app__work-hover {
+  opacity: 1;
+}
+
+.app__work-hover a {
+  text-decoration: none;
+}
+
+.app__work-hover a > span {
+  width: 44px;
+  height: 44px;
+  margin: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  color: #fff;
+}
+
+.app__work-hover svg {
+  width: 20px;
+  height: 20px;
+}
+
+.app__work-content {
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 1.1rem 0.35rem 0.35rem;
+}
+
+.app__work-content h3 {
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.app__work-content > p {
+  margin-top: 0.6rem;
+  color: var(--gray-color);
+  font-size: 0.88rem;
+}
+
+.app__work-tag {
+  margin-top: auto;
+  padding-top: 1.2rem;
+}
+
+.app__work-tag p {
+  color: var(--gray-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+@media (max-width: 960px) {
+  .app__work-portfolio {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .app__work-filter {
     justify-content: flex-start;
-    align-items: center;
-    flex-wrap: wrap;
+  }
 
-    margin: 4rem 0 2rem;
+  .app__work-portfolio {
+    grid-template-columns: 1fr;
+  }
 
-    .app__work-filter-item{
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        background-color: #fff;
-        color: rgb(16, 16, 16);
-        font-weight: 800;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin: 0.5rem;
-
-        &:hover{
-            background-color: var(--red-color);
-            color: #fff;
-        }
-
-        @media screen and (min-width: 2000px) {
-            padding: 1rem 2rem;
-            border-radius: 0.85rem;
-        }
-    }
-    .item-active{
-        background-color: var(--red-color);
-        color: #fff;
-    }
-}
-
-.app__work-portfolio{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-
-    .app__work-item{
-        width: 270px;
-        flex-direction: column;
-
-        margin: 2rem;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        background-color: var(--lightgraybg-color);
-        color: #000;
-
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        &:hover{
-            box-shadow: 0 0 25px rgba(0, 0, 0, .2);
-        }
-
-        @media screen and (min-width: 2000px) {
-            height: 470px;
-            padding: 1.25rem;
-            border-radius: 0.75rem;
-        }
-
-        @media screen and (max-width: 300) {
-            width: 100%;
-            margin: 1rem;
-        }
-    }
-}
-
-.app__work-img{
-    width: 100%;
-    height: 230px;
-
-    position: relative;
-
-    img{
-        width: 100%;
-        height: 100%;
-        border-radius: .5rem;
-        object-fit: cover;
-    }
-
-    @media screen and (min-width: 2000px) {
-        height: 350px;
-    }
-}
-
-.app__work-hover{
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, .5);
-
-    border-radius: 0.5rem;
-    opacity: 0;
-    transition: all 0.3s ease;
-
-    div{
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: rgba(0, 0, 0,.5);
-        color: #fff;
-
-        margin: 1rem;
-        font-family: var(--font-base);
-        font-weight: 800;
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        svg{
-            width: 50%;
-            height: 50%;
-            color: var(--white-color);
-        }
-    }
-}
-
-.app__work-content{
-    padding: .5rem;
-    width: 100%;
-    position: relative;
-    flex-direction: column;
-    max-height: 150px;
-
-    h4{
-        margin-top: 1rem;
-        line-height: 1.5;
-    }
-
-    .app__work-tag{
-        position: absolute;
-
-        padding: .5rem 1rem;
-        border-radius: 10px;
-
-        background-color: var(--lightgraybg-color);
-        top: -25px;
-    }
-}
-
-#p_details{
-    display: none;
-}
-
-.project_details{
-    width: 200px;
-    height: 200px;
-    background-color: var(--primary-color);
+  .app__work-hover {
+    align-items: flex-end;
+    justify-content: flex-end;
+    background: linear-gradient(180deg, transparent 40%, rgba(20, 25, 30, 0.55));
+    opacity: 1;
+  }
 }

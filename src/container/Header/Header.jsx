@@ -1,105 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { HiArrowRight } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 
 import { AppWrap } from '../../wrapper';
 import { images } from '../../constants';
-
 import './Header.scss';
 
-const scaleVariants = {
-  whileInView: {
-    scale: [0, 1],
-    opacity: [0, 1],
-    transition: {
-      ease: 'easeInOut',
-      duration: 1,
-    }
-  }
-};
+const roles = [
+  'Gérémy CITTÉ',
+  'Développeur Web',
+  'Développeur Mobile',
+  'Développeur de Jeux-Vidéo',
+  'Créateur de Contenu',
+];
 
-export const Header = () => {
-
-  const [ loopNum, setLoopNum ] = useState(0);
-  const [ isDeleting, setIsDeleting ] = useState(false);
-  const toRotate = [ "Gérémy CITTÉ", "Développeur Web", "Développeur Mobile", "Développeur de Jeux-Vidéo", "Créateur de Contenu" ];
-  const [ text, setText] = useState('');
-  const [index, setIndex] = useState(1);
-  const [ delta, setDelta ] = useState(300 - Math.random() * 100);
-  const period = 2000;
-  const selector = '|';
+const Header = () => {
+  const [reducedMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [text, setText] = useState(reducedMotion ? roles[0] : '');
 
   useEffect(() => {
-    let ticker = setInterval(() => {
-      tick();
-    }, delta);
+    if (reducedMotion) return undefined;
 
-    return () => { clearInterval(ticker) };
-  }, [text])
+    const word = roles[wordIndex];
+    const isComplete = text === word;
+    const isEmpty = text.length === 0;
+    const delay = isComplete && !isDeleting ? 1800 : isDeleting ? 65 : 105;
 
-  const tick = () => {
-    let i = loopNum % toRotate.length;
-    let fullText = toRotate[i];
-    let updatedText = isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1);
+    const timeout = window.setTimeout(() => {
+      if (isComplete && !isDeleting) {
+        setIsDeleting(true);
+      } else if (isEmpty && isDeleting) {
+        setIsDeleting(false);
+        setWordIndex((current) => (current + 1) % roles.length);
+      } else {
+        setText(word.slice(0, text.length + (isDeleting ? -1 : 1)));
+      }
+    }, delay);
 
-    setText(updatedText);
-
-    if (isDeleting) {
-      setDelta(100);
-    }
-
-    if (!isDeleting && updatedText === fullText) {
-      setIsDeleting(true);
-      setIndex(prevIndex => prevIndex - 1);
-      setDelta(period);
-    } else if (isDeleting && updatedText === '') {
-      setIsDeleting(false);
-      setLoopNum(loopNum + 1);
-      setIndex(1);
-      setDelta(100);
-    } else {
-      setIndex(prevIndex => prevIndex + 1);
-    }
-  }
+    return () => window.clearTimeout(timeout);
+  }, [reducedMotion, wordIndex, isDeleting, text]);
 
   return (
-
-    <div className='app__header app__flex'>
-
+    <div className="app__header">
       <div className="cols">
-        <span className="topline">Bonjours</span>
-        <h1>Je suis <span className="retour_ligne"></span><span className="multiText">{text + selector}</span></h1>
-      </div>
-      
-      {/*
-      <div className='stars'>
-        <div id="stars"></div>
-        <div id="stars2"></div>
-        <div id="stars3"></div>
+        <span className="topline">Bonjour,</span>
+        <h1>
+          <span className="hero-intro">Je suis</span>
+          <span className="hero-typed" aria-hidden="true">
+            {text}<span className="hero-cursor">|</span>
+          </span>
+          <span className="visually-hidden">Gérémy Citté, développeur web et mobile</span>
+        </h1>
+        <p className="h_p">
+          Je conçois des expériences web, mobiles et communautaires fiables,
+          soignées et adaptées à vos objectifs.
+        </p>
+        <div className="header-actions">
+          <a href="#portfolio">Découvrir mes projets <HiArrowRight aria-hidden="true" /></a>
+          <a href="#contact">Parler de votre projet</a>
         </div>
-      */}
+      </div>
 
       <motion.div
-        whileInView={{ opacity: [0, 1] }}
-        transition={{ duration: .5, delayChildren: .5 }}
-        className='app__header-img'
+        className="app__header-img"
+        initial={reducedMotion ? false : { opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55 }}
       >
-        <img src={images.logo_dragon} alt="profile_bg" /> {/* image de moi sur la page principal */}
+        <img src={images.logo_dragon} alt="Dragon, emblème de KAIIZER971" />
       </motion.div>
 
-      <motion.div
-        variants={scaleVariants}
-        whileInView={scaleVariants.whileInView}
-        className='app__header-circles'
-      >
-        {[images.react, images.ue5, images.js].map((circle, index) => (
-          <div className='circle-cmp app__flex' key={`circle-${index}`}>
-            <img src={circle} alt='circle' />
-          </div>
+      <div className="app__header-circles" aria-hidden="true">
+        {[images.react, images.ue5, images.js].map((icon, index) => (
+          <motion.div
+            className="circle-cmp"
+            key={icon}
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.75 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: index * 0.12 }}
+          >
+            <img src={icon} alt="" />
+          </motion.div>
         ))}
-
-      </motion.div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default AppWrap(Header, 'home');
+export default AppWrap(Header, 'home', 'app__primarybg');

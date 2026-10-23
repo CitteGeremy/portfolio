@@ -1,124 +1,135 @@
-.app__footer{
-    flex: 1;
-    width: 100%;
-    flex-direction: column;
+.app__footer {
+  width: 100%;
+  flex-direction: column;
 }
 
-.app__footer-cards{
-    width: 60%;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-wrap: wrap-reverse;
-    margin: 4rem 2rem 2rem;
-
-    .app__footer-card{
-        min-width: 290px;
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: center;
-
-        margin: 1rem 0;
-        padding: 1rem;
-        border-radius: 10px;
-        cursor: pointer;
-        background-color: var(--lightgraybg-color);
-
-        transition: all 0.3s ease-in-out;
-
-        img{
-            width: 40px;
-            height: 40px;
-            margin: 0 0.7rem;
-        }
-
-        p{
-            font-weight: 600;
-        }
-
-        a{
-            text-decoration: none;
-            font-weight: 500;
-            color: var(--blacktext-color);
-        }
-
-        &:hover{
-            box-shadow: 0 0 25px #fef4f5;
-        }
-
-        @media screen and (max-width: 450px){
-            width: 100%;
-        }
-    }
-
-    @media screen and (max-width: 768px){
-        width: 100%;
-    }
+.app__footer-cards {
+  display: grid;
+  width: min(100%, 760px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2.75rem;
 }
 
-.app__footer-cards .app__footer-card:last-child{
-    background-color: var(--lightgraybg-color);
+.app__footer-card {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.15rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 9px;
+  background: var(--card-surface);
+  color: var(--blacktext-color);
+  text-decoration: none;
+  transition: border-color 0.2s ease;
 }
 
-.app__footer-form{
-    width: 60%;
-    flex-direction: column;
-    margin: 1rem 2rem;
+.app__footer-card:hover,
+.app__footer-card:focus-visible {
+  border-color: var(--secondary-color);
+}
 
-    div{
-        width: 100%;
+.contact-icon {
+  width: 23px;
+  height: 23px;
+  flex: none;
+  color: var(--accent-ink);
+}
 
-        margin: 0.75rem 0;
-        border-radius: 10px;
-        cursor: pointer;
-        background-color: var(--primary-color);
+.app__footer-card span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.2rem;
+  overflow-wrap: anywhere;
+  font-size: 0.87rem;
+  font-weight: 700;
+}
 
-        transition: all 0.3s ease-in-out;
+.app__footer-card small {
+  color: var(--gray-color);
+  font-size: 0.73rem;
+  font-weight: 500;
+}
 
-        input, textarea{
-            width: 100%;
-            padding: 0.95rem;
-            border: none;
-            border-radius: 7px;
-            background-color: var(--primary-color);
+.app__footer-form {
+  width: min(100%, 760px);
+  flex-direction: column;
+  margin-top: 1.5rem;
+}
 
-            font-family: var(--font-base);
-            color: var(--blacktext-color);
-            outline: none;
-        }
+.app__footer-form label {
+  display: block;
+  width: 100%;
+  margin: 0.5rem 0;
+}
 
-        textarea{
-            height: 170px;
-        }
+.app__footer-form input,
+.app__footer-form textarea {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px solid var(--surface-border);
+  border-radius: 7px;
+  outline: none;
+  background: var(--card-surface);
+  color: var(--blacktext-color);
+}
 
-        &:hover{
-            box-shadow: 0 0 25px var(--primary-color);
-        }
-    }
+.app__footer-form input:focus,
+.app__footer-form textarea:focus {
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(186, 24, 27, 0.11);
+}
 
-    .send_button{
-        padding: 1rem 2rem;
-        border-radius: 10px;
-        border: none;
-        background-color: var(--secondary-color);
+.app__footer-form textarea {
+  min-height: 170px;
+  resize: vertical;
+}
 
-        font-weight: 500;
-        color: var(--white-color);
-        outline: none;
-        margin: 2rem 0 0 0;
-        font-family: var(--font-base);
-        cursor: pointer;
-    }
+.send_button {
+  min-width: 140px;
+  margin-top: 1.2rem;
+  padding: 0.85rem 1.8rem;
+  border: 1px solid var(--secondary-color);
+  border-radius: 7px;
+  background: var(--secondary-color);
+  color: #fff;
+  font-weight: 700;
+  transition: background-color 0.2s ease;
+}
 
-    @media screen and (max-width: 768px){
-        width: 100%;
-        margin: 1rem 0;
-    }
+.send_button:hover:not(:disabled),
+.send_button:focus-visible:not(:disabled) {
+  background: var(--darkred-color);
+}
 
-    .msg_text{
-        max-height: 300px;
-        min-width: 40%;
-        max-width: 100%;
-    }
+.send_button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.form-status {
+  display: flex;
+  min-height: 1.4rem;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.8rem;
+  color: var(--gray-color);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.form-status--success {
+  color: #198754;
+}
+
+.form-status--error {
+  color: #c0392b;
+}
+
+@media (max-width: 640px) {
+  .app__footer-cards {
+    grid-template-columns: 1fr;
+  }
 }

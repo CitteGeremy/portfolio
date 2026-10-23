@@ -1,105 +1,85 @@
-import React, { useState, useRef } from 'react'
+import { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
+import { HiCheckCircle, HiOutlineMail, HiOutlinePhone } from 'react-icons/hi';
 
-import { images } from '../../constants';
 import { AppWrap, MotionWrap } from '../../wrapper';
-import { client } from '../../client';
 import './Footer.scss';
 
+const EMAIL_SERVICE_ID = 'service_4ob85f8';
+const EMAIL_TEMPLATE_ID = 'template_08tzpc8';
+const EMAIL_PUBLIC_KEY = 'lciNlBCz-_cRWAhKF';
 
 const Footer = () => {
+  const form = useRef(null);
+  const [status, setStatus] = useState('idle');
 
-  const form = useRef();
-  const [msgsent, setMsgSent] = useState(false);
+  const sendEmail = async (event) => {
+    event.preventDefault();
+    setStatus('sending');
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-
-    emailjs.sendForm('service_4ob85f8', 'template_08tzpc8', form.current, 'lciNlBCz-_cRWAhKF')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
-      }
-    );
-    e.target.reset();
-    setMsgSent(true);
-  };
-
-/*
-  const [formData, setFormData] = useState({name:'', email: '', message: ''})
-  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
-  const [loading, setLoading] = useState(false)
-
-  const { name, email, message } = formData;
-
-  const handleChangeInput = (e) => {
-    const {name, value } = e.target;
-
-    setFormData({ ...formData, [name]: value });
-  }
-
-  const handleSubmit = () => {
-    setLoading(true);
-
-    const contact = {
-      _type: 'contact',
-      name: name,
-      email: email,
-      message: message,
+    try {
+      await emailjs.sendForm(EMAIL_SERVICE_ID, EMAIL_TEMPLATE_ID, form.current, EMAIL_PUBLIC_KEY);
+      form.current.reset();
+      setStatus('success');
+    } catch {
+      setStatus('error');
     }
-
-    client.create(contact)
-    .then(() => {
-      setLoading(false);
-      setIsFormSubmitted(true);
-    })
-  }
-  */
+  };
 
   return (
     <>
-    <h2 className='head-text'>Contactez-Moi</h2>
-    <div className='text-deco'></div>
+      <h2 className="head-text">Contactez-<span>moi</span></h2>
+      <div className="text-deco" />
+      <p className="section-intro contact-intro">
+        Un projet ou une question ? Écrivez-moi, je vous répondrai avec plaisir.
+      </p>
 
-    <div className='app__footer-cards'>
-      <div className='app__footer-card'>
-        <img src={images.gmail} alt="email" />
-        <a href='mailto:cittegeremy@gmail.com' className='p-text'>cittegeremy@gmail.com</a>
+      <div className="app__footer-cards">
+        <a className="app__footer-card" href="mailto:cittegeremy@gmail.com">
+          <HiOutlineMail className="contact-icon" aria-hidden="true" />
+          <span>
+            <small>Email</small>
+            cittegeremy@gmail.com
+          </span>
+        </a>
+        <a className="app__footer-card" href="tel:+33665570331">
+          <HiOutlinePhone className="contact-icon" aria-hidden="true" />
+          <span>
+            <small>Téléphone</small>
+            +33 6 65 57 03 31
+          </span>
+        </a>
       </div>
-      <div className='app__footer-card'>
-        <img src={images.mobile} alt="mobile" />
-        <a href='tel: +330665570331' className='p-text'>(+33) 6.65.57.03.31</a>
-      </div>
-    </div>
 
-    {!msgsent ?
+      <form ref={form} onSubmit={sendEmail} className="app__footer-form app__flex">
+        <label>
+          <span className="visually-hidden">Votre nom</span>
+          <input className="p-text" type="text" placeholder="Votre nom" name="user_name" autoComplete="name" required />
+        </label>
+        <label>
+          <span className="visually-hidden">Votre email</span>
+          <input className="p-text" type="email" placeholder="Votre email" name="user_email" autoComplete="email" required />
+        </label>
+        <label>
+          <span className="visually-hidden">Votre message</span>
+          <textarea className="p-text" placeholder="Votre message" name="message" required />
+        </label>
 
-<form ref={form} onSubmit={sendEmail} className='app__footer-form app__flex'>
-      <div className='app__flex'>
-        <input className='p-text' type='text' placeholder='Votre Nom' name='user_name' required />
-      </div>
-      <div className='app__flex'>
-        <input className='p-text' type='email' placeholder='Votre Email' name='user_email' required />
-      </div>
-      <div>
-        <textarea
-        className='p-text'
-        placeholder='Votre message'
-        name='message'
-        required
-        />
-      </div>
-      {/*<button type='button' className='p-text' onClick={handleSubmit}>{loading ? 'Envoi en cours' : 'Envoyer'}</button>*/}
-      <input type='submit' className='p-text send_button' value='Envoyer'/>
-    </form>
-    : <div>
-      <h3 className='head-text'>Merci d'être entré en contact avec moi</h3>
-    </div>
+        <button type="submit" className="send_button" disabled={status === 'sending'}>
+          {status === 'sending' ? 'Envoi en cours…' : 'Envoyer'}
+        </button>
 
-    }
+        <p className={['form-status', 'form-status--' + status].join(' ')} aria-live="polite">
+          {status === 'success' && (
+            <><HiCheckCircle aria-hidden="true" /> Merci, votre message a bien été envoyé.</>
+          )}
+          {status === 'error' && (
+            'Une erreur est survenue. Vous pouvez me contacter directement par email.'
+          )}
+        </p>
+      </form>
     </>
-  )
-}
+  );
+};
 
 export default AppWrap(MotionWrap(Footer, 'app__footer'), 'contact', 'app__thirdbg');
